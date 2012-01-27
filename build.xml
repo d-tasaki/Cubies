@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="Cubies">
+  <!-- The local.properties file is created and updated by the 'android'
+       tool.
+       It contains the path to the SDK. It should *NOT* be checked into
+       Version Control Systems. -->
+  <property file="local.properties" />
+
+  <!-- The build.properties file can be created by you and is never touched
+       by the 'android' tool. This is the place to change some of the
+       default property values used by the Ant rules.
+       Here are some properties you may want to change/update:
+
+       source.dir
+       The name of the source directory. Default is 'src'.
+       out.dir
+       The name of the output directory. Default is 'bin'.
+
+       Properties related to the SDK location or the project target should
+       be updated using the 'android' tool with the 'update' action.
+
+       This file is an integral part of the build system for your
+       application and should be checked into Version Control Systems.
+
+    -->
+  <property file="build.properties" />
+
+  <!-- The default.properties file is created and updated by the 'android'
+       tool, as well as ADT.
+       This file is an integral part of the build system for your
+       application and should be checked into Version Control Systems. -->
+  <property file="default.properties" />
+
+
+    <!-- Compiles this project's .java files into .class files. -->
+    <target name="compile" depends="-pre-build, -aidl, -renderscript, -resource-src, -pre-compile"
+                description="Compiles project's .java files into .class files">
+        <if condition="${manifest.hasCode}">
+            <then>
+                <!-- If android rules are used for a test project, its classpath should include
+                     tested project's location -->
+                <condition property="extensible.classpath"
+                        value="${tested.project.absolute.dir}/bin/classes"
+                        else=".">
+                    <isset property="tested.project.absolute.dir" />
+                </condition>
+                <condition property="extensible.libs.classpath"
+                        value="${tested.project.absolute.dir}/libs"
+                        else="${jar.libs.dir}">
+                    <isset property="tested.project.absolute.dir" />
+                </condition>
+                <javac encoding="${java.encoding}"
+                       source="${java.source}" target="${java.target}"
+                       debug="true" extdirs=""
+                       destdir="${out.classes.absolute.dir}"
+                       bootclasspathref="android.target.classpath"
+                       verbose="${verbose}"
+                       classpath="${extensible.classpath}"
+                       classpathref="jar.libs.ref"
+                       includeantruntime="false"
+                       fork="true">
+                    <src path="${source.absolute.dir}" />
+                    <src path="${gen.absolute.dir}" />
+                    <src refid="project.libraries.src" />
+                    <classpath>
+                        <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+                    </classpath>
+                    <compilerarg value="-J-Duser.language=en" />
+                </javac>
+            </then>
+            <else>
+                <echo>hasCode = false. Skipping...</echo>
+            </else>
+        </if>
+    </target>
+
+  <!-- Required pre-setup import -->
+  <import file="${sdk.dir}/tools/ant/pre_setup.xml" />
+
+  <!-- extension targets. Uncomment the ones where you want to do custom work
+       in between standard targets -->
+  <!--
+      <target name="-pre-build">
+      </target>
+      <target name="-pre-compile">
+      </target>
+      
+      [This is typically used for code obfuscation.
+      Compiled code location: ${out.classes.absolute.dir}
+      If this is not done in place, override ${out.dex.input.absolute.dir}]
+      <target name="-post-compile">
+      </target>
+    -->
+  
+  <!-- Execute the Android Setup task that will setup some properties
+       specific to the target, and import the build rules files.
+
+       The rules file is imported from <SDK>/tools/ant/
+       Depending on the project type it can be either:
+         - main_rules.xml
+         - lib_rules.xml
+         - test_rules.xml
+
+       To customize existing targets, there are two options:
+         - Customize only one target:
+         - copy/paste the target into this file, *before* the <setup> task.
+         - customize it to your needs.
+         - Customize the whole script.
+         - copy/paste the content of the rules files (minus the top node)
+           into this file, *after* the <setup> task
+         - disable the import of the rules by changing the setup task
+           below to <setup import="false" />.
+         - customize to your needs.
+    -->
+  <setup />
+
+  <!--
+      <property environment="env"/>
+      <property name="debuglevel" value="source,lines,vars"/>
+      <property name="target" value="1.6"/>
+      <property name="source" value="1.6"/>
+      <path id="Android 2.3.3.libraryclasspath">
+        <pathelement location="../../Android/android-sdk/platforms/android-10/android.jar"/>
+      </path>
+      <path id="Cubies.classpath">
+        <pathelement location="bin"/>
+        <path refid="Android 2.3.3.libraryclasspath"/>
+      </path>
+      <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+          <fileset dir="src">
+            <exclude name="**/*.java"/>
+          </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+          <fileset dir="gen">
+            <exclude name="**/*.java"/>
+          </fileset>
+        </copy>
+      </target>
+      <target name="clean">
+        <delete dir="bin"/>
+      </target>
+      <target depends="clean" name="cleanall"/>
+      <target depends="build-subprojects,build-project" name="build"/>
+      <target name="build-subprojects"/>
+      <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+          <src path="src"/>
+          <classpath refid="Cubies.classpath"/>
+        </javac>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+          <src path="gen"/>
+          <classpath refid="Cubies.classpath"/>
+        </javac>
+      </target>
+      <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    -->
+
+</project>
