@@ -53,6 +53,7 @@ public class GLCubiesSurfaceView extends GLSurfaceView {
             setCube (new Cube());
             mActionMode = ActionMode.NONE;
             mMover = null;
+            mMoverType = 0;
         }
 
         public GLCubiesRenderer(Cube cube) {
@@ -94,9 +95,47 @@ public class GLCubiesSurfaceView extends GLSurfaceView {
                 } else {
                     mActionMode = ActionMode.ROTATE_CAMERA;
                 }
-            } else if (mActionMode == ActionMode.MOVE_CUBIES) {
-                mMover = mCube.
+            } 
+            if (mActionMode == ActionMode.MOVE_CUBIES) {
+                //mMover = mCube.
             }
+/*
+            if (mMover == null) {
+            	switch (mMoverType) {
+            	case 0:
+            		mMover = new MoverB();
+            		break;
+            	case 1:
+            		mMover = new MoverD();
+            		break;
+            	case 2:
+            		mMover = new MoverE();
+            		break;
+            	case 3:
+            		mMover = new MoverF();
+            		break;
+            	case 4:
+            		mMover = new MoverL();
+            		break;
+            	case 5:
+            		mMover = new MoverM();
+            		break;
+            	case 6:
+            		mMover = new MoverR();
+            		break;
+            	case 7:
+            		mMover = new MoverS();
+            		break;
+            	case 8:
+            		mMover = new MoverU();
+            		break;
+            	}
+            	mMoverType++;
+            	if (mMoverType > 8) {
+            		mMoverType = 0;
+            	}
+            }
+*/
             if (mMover != null) {
                 mCube.animate (gl, mMover, mTime);
                 mTime += 0.05f;
@@ -198,6 +237,7 @@ public class GLCubiesSurfaceView extends GLSurfaceView {
 
         private GLCube mCube;
         private Mover mMover;
+        private int mMoverType;
 
     }
 

@@ -1,5 +1,7 @@
 package my.test.Cubies.gl;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import my.test.Cubies.gl.Vector;
 
 public class GLPickingSquare {

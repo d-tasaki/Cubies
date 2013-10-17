@@ -29,6 +29,10 @@ public class GLCube implements GLDrawable {
                 break;
             }
         }
+        
+        mPickingSquares = new GLPickingSquare[2];
+        mPickingSquares[0] = new GLPickingSquareF();
+        mPickingSquares[1] = new GLPickingSquareU();
     }
 
     @Override
@@ -95,18 +99,18 @@ public class GLCube implements GLDrawable {
         float[] eye = new float[4];
         eye[0] = 0.0f; eye[1] = 0.0f; eye[2] = 0.0f; eye[3] = 1.0f;
 
-        float modelInv = new float[16];
+        float[] modelInv = new float[16];
         Matrix.invertM (modelInv, 0, model, 0);
 
         // Transform the clipping point and eye point with the inverted Modelview matrix
-        Matrix.multiplyMV (cp,  0, modelInv, 0, ret, 0);
+        Matrix.multiplyMV (cp,  0, modelInv, 0, cp,  0);
         Matrix.multiplyMV (eye, 0, modelInv, 0, eye, 0);
         cp [0] /= cp [3]; cp [1] /= cp [3]; cp [2] /= cp [3]; cp [3] = 1.0f;
         eye[0] /= eye[3]; eye[1] /= eye[3]; eye[2] /= eye[3]; eye[3] = 1.0f;
 
         // Pick a square by tracing a ray from eye through (cx, cy, cz)
         float[] pp = new float[3];
-        for (GLPickingSquare ps : mPickingSuares) {
+        for (GLPickingSquare ps : mPickingSquares) {
             if (ps.pick (gl, cp, eye, pp)) {
                 mLastPickedSquare = ps;
                 mLastPickedPoint  = pp;
@@ -122,6 +126,7 @@ public class GLCube implements GLDrawable {
 
     private Cube mCube;
     private HashMap<CubieLabel, GLCubie> mCubieList;
-    private GLPickingSquare mLastPickedSquare;
-    private float[]         mLastPickedPoint;
+    private GLPickingSquare[] mPickingSquares;
+    private GLPickingSquare   mLastPickedSquare;
+    private float[]           mLastPickedPoint;
 }

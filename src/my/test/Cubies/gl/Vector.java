@@ -42,4 +42,9 @@ public class Vector {
         result[2 + resultOffset] = y1 * x2 - x1 * y2;
     }
     
+    public static void unit (float[] result, int resultOffset,
+    						 float[] rhs,    int rhsOffset) {
+    	
+    }
+    
 }
